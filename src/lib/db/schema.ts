@@ -67,7 +67,7 @@ export const coachMessages = sqliteTable('coach_messages', {
     .default(sql`(unixepoch() * 1000)`),
   role: text('role', { enum: ['user', 'coach'] }).notNull(),
   content: text('content').notNull(),
-  kind: text('kind', { enum: ['daily', 'reactive', 'chat', 'audit'] })
+  kind: text('kind', { enum: ['daily', 'reactive', 'chat', 'audit', 'wakeup'] })
     .notNull()
     .default('chat'),
   read: integer('read', { mode: 'boolean' }).notNull().default(false),
