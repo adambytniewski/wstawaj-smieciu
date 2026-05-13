@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-top: env(safe-area-inset-top);
+  --font-display: 'Anton', Impact, 'Bebas Neue', sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background: #000;
+}
+
+body {
+  background: #000;
+  color: #fafafa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overscroll-behavior: none;
+  /* subtle vignette + noise */
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,45,45,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(124,92,255,0.04) 0%, transparent 60%),
+    linear-gradient(180deg, #060606 0%, #000 60%);
+  min-height: 100dvh;
+  padding-top: var(--safe-top);
+}
+
+@layer base {
+  button, a {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+  input, textarea, select {
+    font-size: 16px; /* prevent iOS zoom */
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #52525b;
+  }
+  /* iOS date inputs visible */
+  input[type="datetime-local"] {
+    color: #fafafa;
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  /* Cards */
+  .card {
+    @apply bg-surface border border-line rounded-2xl shadow-depth-1;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 40%);
+  }
+  .card-pad { @apply card p-5; }
+  .card-glass {
+    background: linear-gradient(180deg, rgba(20,20,24,0.8) 0%, rgba(10,10,12,0.9) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1.25rem;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 h-12 rounded-xl font-semibold text-sm transition-all active:scale-[0.97] select-none touch-manipulation;
+    min-height: 44px;
+  }
+  .btn-primary {
+    @apply btn text-white;
+    background: linear-gradient(180deg, #ff4b4b 0%, #e6202b 100%);
+    box-shadow: 0 8px 24px -8px rgba(255,45,45,0.6), 0 0 0 1px rgba(255,255,255,0.1) inset;
+  }
+  .btn-primary:active { background: linear-gradient(180deg, #e6202b 0%, #b81b22 100%); }
+  .btn-ghost {
+    @apply btn bg-surface2 text-ink border border-line/60;
+  }
+  .btn-ghost:active { @apply bg-surface3; }
+  .btn-outline {
+    @apply btn border border-line bg-surface/40 text-ink;
+  }
+  .btn-outline:active { @apply bg-surface2; }
+
+  /* Typography */
+  .label {
+    @apply text-[10px] uppercase tracking-[0.18em] text-muted font-semibold;
+  }
+  .label-strong {
+    @apply text-[11px] uppercase tracking-[0.2em] text-ink2 font-bold;
+  }
+  .num { @apply font-display tracking-tight; font-feature-settings: 'tnum'; }
+  .stat-num { @apply font-display leading-none tracking-tight; font-feature-settings: 'tnum'; }
+  .display { @apply font-display leading-[0.85] tracking-tighter uppercase; }
+
+  /* Inputs */
+  .input {
+    @apply w-full bg-surface2 border border-line rounded-xl px-4 h-12 text-ink placeholder:text-muted focus:border-accent/60 focus:bg-surface3 outline-none transition-colors;
+    min-height: 44px;
+  }
+  textarea.input {
+    @apply h-auto py-3;
+    min-height: 64px;
+  }
+
+  /* Chips */
+  .chip {
+    @apply inline-flex items-center gap-1 px-2 h-6 rounded-md text-[10px] uppercase tracking-wider bg-surface2 text-muted border border-line/60 font-semibold;
+  }
+  .divider { @apply h-px bg-line; }
+
+  /* Subtle hairline above bottom nav etc. */
+  .hairline-top {
+    box-shadow: 0 -1px 0 0 rgba(255,255,255,0.06);
+  }
+
+  /* Shimmer skeleton */
+  .skeleton {
+    @apply relative overflow-hidden bg-surface2 rounded-md;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: shimmer 2.4s linear infinite;
+  }
+}
+
+/* hide scrollbars on bottom nav */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* fix datetime input arrow color */
+input::-webkit-calendar-picker-indicator { filter: invert(1) opacity(0.6); cursor: pointer; }
+
+/* range slider styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: #26262d;
+  border-radius: 9999px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 22px; width: 22px; border-radius: 50%;
+  background: #ff2d2d;
+  margin-top: -9px;
+  box-shadow: 0 0 0 4px rgba(255,45,45,0.18);
+}
+
+/* Disable iOS text-size auto adjust */
+html { -webkit-text-size-adjust: 100%; }
+
+/* PWA standalone tweaks */
+@media all and (display-mode: standalone) {
+  body { background: #000; }
+}
